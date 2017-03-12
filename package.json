@@ -1,6 +1,6 @@
 {
   "name": "amqp-task-delegation",
-  "version": "0.1.0-0",
+  "version": "0.0.1",
   "dependencies": {
     "amqp-ts": "^1.4.0",
     "bluebird": "^3.5.0",
