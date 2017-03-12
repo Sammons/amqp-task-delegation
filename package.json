@@ -1,0 +1,13 @@
+{
+  "name": "amqp-task-delegation",
+  "version": "0.1.0-0",
+  "dependencies": {
+    "amqp-ts": "^1.4.0",
+    "bluebird": "^3.5.0",
+    "typescript": "^2.2.1",
+    "uuid": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^7.0.8"
+  }
+}
