@@ -1,0 +1,13 @@
+tester:
+  build: '.'
+  environment: 
+    rabbit_uri: 'amqp://guest:guest@rmq/%2F'
+  volumes: 
+    - ./test:/test
+  links: 
+    - rmq
+
+rmq: 
+  image: rabbitmq:3.6-management
+  ports: 
+    - "35000:15672"

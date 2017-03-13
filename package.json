@@ -1,6 +1,13 @@
 {
   "name": "amqp-task-delegation",
-  "version": "0.0.1",
+  "version": "0.0.48",
+  "scripts": {
+    "update-then-test-local-env": "tsc -p src && npm --no-git-tag-version version patch && cd test && yarn && tsc -p . && mocha",
+    "test-local-env": "cd test && mocha",
+    "update-then-test-docker-env": "tsc -p src && npm --no-git-tag-version version patch && docker-compose up -d && docker-compose logs -f tester",
+    "test-docker-env": "docker-compose up -d && docker-compose logs -f tester",
+    "build": "rm -rf built && tsc -p src"
+  },
   "dependencies": {
     "amqp-ts": "^1.4.0",
     "bluebird": "^3.5.0",

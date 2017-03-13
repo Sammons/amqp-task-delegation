@@ -1,0 +1,6 @@
+{
+    "typescript.check.tscVersion": true,
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "editor.renderWhitespace": "all",
+    "editor.tabSize": 2
+}

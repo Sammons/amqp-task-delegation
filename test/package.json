@@ -1,0 +1,15 @@
+{
+  "name": "test-amqp-task-delegation",
+  "scripts": {
+    "buildtest": "tsc -p . && mocha"
+  },
+  "dependencies": {
+    "amqp-task-delegation": "file:../",
+    "mocha": "^3.2.0",
+    "source-map-support": "^0.4.11"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.40",
+    "@types/node": "^7.0.8"
+  }
+}
