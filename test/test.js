@@ -38,13 +38,13 @@ const CreateSingleShardPublisherWithNoDepthHandler = (namespace, c) => __awaiter
         connection,
         distributionQueueDepthHandler: null,
         namespace,
-        shardExtractor: SingleShardPublisherExtractor
+        shardExtractor: SingleShardPublisherExtractor,
+        options: { durable: true }
     });
     yield publisher.initialized;
     return publisher;
 });
 const CleanupSingleShardPublisherTest = (publisher) => __awaiter(this, void 0, void 0, function* () {
-    yield publisher.freezePublishingAndUnhookSupervision();
     let consumer = yield new amqp_task_delegation_1.DelegatedConsumer({
         namespace: publisher.namespace,
         connection: publisher.connection
@@ -79,23 +79,6 @@ describe('Environment', function () {
 });
 describe('AMQP Task Delegation', function () {
     describe('publisher', function () {
-        it('should create a supervision queue and exchange on creation', function () {
-            return __awaiter(this, void 0, void 0, function* () {
-                let namespace = uuid.v4();
-                let publisher = yield CreateSingleShardPublisherWithNoDepthHandler(namespace);
-                let taskQueue = publisher.getTaskDistributionQueueName();
-                let superQ = yield DeclareQueue(publisher.getSupervisionQueueName(), {
-                    noCreate: true
-                });
-                let superEx = yield DeclareExchange(publisher.getSupervisionExchangeName(), 'fanout', {
-                    noCreate: true,
-                    autoDelete: true
-                });
-                yield CleanupSingleShardPublisherTest(publisher);
-                assert(superQ != null, 'Queue should already exist');
-                assert(superEx != null, 'Exchange should already exist');
-            });
-        });
         it('should create a task queue upon publish', function () {
             return __awaiter(this, void 0, void 0, function* () {
                 let namespace = uuid.v4();
