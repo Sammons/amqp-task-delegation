@@ -13,7 +13,14 @@ export class DelegatedConsumer {
   constructor(private opts: {
     namespace: string;
     connection: amqp.Connection;
+    options?: { durable?: boolean; };
   }) {
+    if (!opts.options) {
+      this.opts.options = {};
+    }
+    if (!opts.options.durable) {
+      this.opts.options.durable = true;
+    }
     debugDeclarations('task shard consumer initialized', { namespace: opts.namespace });
   }
 
@@ -23,8 +30,7 @@ export class DelegatedConsumer {
     await this.opts.connection.initialized;
 
     let queue = new amqp.Queue(this.opts.connection, name, {
-      autoDelete: true,
-      durable: true,
+      durable: this.opts.options.durable,
       noCreate: true
     });
     let initResults = await queue.initialized;
@@ -40,7 +46,7 @@ export class DelegatedConsumer {
     await this.opts.connection.initialized;
 
     let distributionQueueOpts = {
-      durable: true,
+      durable: this.opts.options.durable,
       prefetch: 1
     };
 
@@ -112,8 +118,7 @@ export class DelegatedConsumer {
           try {
             debugDeclarations('testing queue for emptiness', { name: queue.name });
             let q = await new amqp.Queue(this.opts.connection, queue.name, {
-              autoDelete: true,
-              durable: true
+              durable: this.opts.options.durable
             });
             let initResult = await q.initialized;
             debugDeclarations('queue emptiness', { initResult });

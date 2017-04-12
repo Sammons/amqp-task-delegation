@@ -36,9 +36,7 @@ export class DelegatedPublisher<T> {
   }
 
   private async getSupervisionExchange() {
-    let exchange = new amqp.Exchange(this.opts.connection, this.getSupervisionExchangeName(), 'fanout', {
-      autoDelete: true
-    });
+    let exchange = new amqp.Exchange(this.opts.connection, this.getSupervisionExchangeName(), 'fanout');
     await exchange.initialized;
     return exchange;
   }
