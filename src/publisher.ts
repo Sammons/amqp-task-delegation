@@ -18,8 +18,17 @@ export class DelegatedPublisher<T> {
     namespace: string;
     shardExtractor: (t: T) => string | Promise<string>;
     connection: amqp.Connection;
-    distributionQueueDepthHandler: (depth: number) => void | Promise<void>
+    distributionQueueDepthHandler: (depth: number) => void | Promise<void>;
+    options: {
+      durable?: boolean;
+    };
   }) {
+    if (!this.opts.options) {
+      this.opts.options = {};
+    }
+    if (!this.opts.options.durable) {
+      this.opts.options.durable = true;
+    }
     debugDeclarations('task shard publisher initialized', { namespace: this.opts.namespace });
     this._initialized = this.initialize();
   }
@@ -45,7 +54,7 @@ export class DelegatedPublisher<T> {
     let queue = new amqp.Queue(
       this.opts.connection,
       this.getSupervisionQueueName(), {
-        durable: true
+        durable: this.opts.options.durable
       });
     await queue.initialized;
     return queue;
@@ -95,7 +104,7 @@ export class DelegatedPublisher<T> {
 
     let queue = this.opts.connection.declareQueue(this.getTaskQueueName(shard), {
       autoDelete: true,
-      durable: true
+      durable: this.opts.options.durable
     });
     let initResults = await queue.initialized;
     debugDeclarations('generated shard queue', { shard, initResults });
@@ -110,7 +119,7 @@ export class DelegatedPublisher<T> {
     await this._initialized;
 
     let distributionQueueOpts = {
-      durable: true,
+      durable: this.opts.options.durable,
       prefetch: 1
     };
 
